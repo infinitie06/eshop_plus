@@ -306,8 +306,8 @@
                                                         <strong>
                                                             <p>{{ labels('front_messages.sold_by', 'Sold By') }}</p>
                                                         </strong>
-                                                        {{ ucfirst($seller_store_data[0]->store_name) }}<br>
-                                                        {{ ucfirst($s_user_data[0]->address) }}<br>
+                                                        {{ arabicText(ucfirst($seller_store_data[0]->store_name)) }}<br>
+                                                        {{ arabicText(ucfirst($s_user_data[0]->address)) }}<br>
                                                         <p>{{ labels('front_messages.email', 'Email:') }}
                                                             {{ $s_user_data[0]->email }}<br>
                                                             {{ labels('front_messages.customer_care', 'Customer Care :') }}
@@ -326,8 +326,8 @@
                                                             </p>
                                                         </strong>
                                                         <span>
-                                                            {{ $invoice->buyer->name }}<br>
-                                                            {{ $invoice->buyer->custom_fields['address'] }}<br>
+                                                            {{ arabicText($invoice->buyer->name) }}<br>
+                                                            {{ arabicText($invoice->buyer->custom_fields['address']) }}<br>
                                                             {{ $invoice->seller->custom_fields['mobile_number'] }}
                                                         </span>
                                                         <br>
@@ -435,7 +435,7 @@
 
                                                                 <tr>
                                                                     <td>{{ $j }}<br></td>
-                                                                    <td class="w-25">{{ $row->pname }}<br></td>
+                                                                    <td class="w-25">{{ arabicText($row->pname) }}<br></td>
                                                                     <td class="w-25">{{ $product_variants }}<br></td>
                                                                     <td>{{ app(CurrencyService::class)->formateCurrency(formatePriceDecimal($price_per_unit)) }}<br>
                                                                     </td>

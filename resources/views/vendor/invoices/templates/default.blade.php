@@ -181,13 +181,13 @@
                     <td class="px-0">
                         @if($invoice->seller->name)
                             <p class="seller-name">
-                                <strong>{{ $invoice->seller->name }}</strong>
+                                <strong>{{ arabicText($invoice->seller->name) }}</strong>
                             </p>
                         @endif
 
                         @if($invoice->seller->address)
                             <p class="seller-address">
-                                {{ __('invoices::invoice.address') }}: {{ $invoice->seller->address }}
+                                {{ __('invoices::invoice.address') }}: {{ arabicText($invoice->seller->address) }}
                             </p>
                         @endif
 
@@ -211,7 +211,7 @@
 
                         @foreach($invoice->seller->custom_fields as $key => $value)
                             <p class="seller-custom-field">
-                                {{ ucfirst($key) }}: {{ $value }}
+                                {{ ucfirst($key) }}: {{ arabicText($value) }}
                             </p>
                         @endforeach
                     </td>
@@ -219,13 +219,13 @@
                     <td class="px-0">
                         @if($invoice->buyer->name)
                             <p class="buyer-name">
-                                <strong>{{ $invoice->buyer->name }}</strong>
+                                <strong>{{ arabicText($invoice->buyer->name) }}</strong>
                             </p>
                         @endif
 
                         @if($invoice->buyer->address)
                             <p class="buyer-address">
-                                {{ __('invoices::invoice.address') }}: {{ $invoice->buyer->address }}
+                                {{ __('invoices::invoice.address') }}: {{ arabicText($invoice->buyer->address) }}
                             </p>
                         @endif
 
@@ -249,7 +249,7 @@
 
                         @foreach($invoice->buyer->custom_fields as $key => $value)
                             <p class="buyer-custom-field">
-                                {{ ucfirst($key) }}: {{ $value }}
+                                {{ ucfirst($key) }}: {{ arabicText($value) }}
                             </p>
                         @endforeach
                     </td>
@@ -281,10 +281,10 @@
                 @foreach($invoice->items as $item)
                 <tr>
                     <td class="pl-0">
-                        {{ $item->title }}
+                        {{ arabicText($item->title) }}
 
                         @if($item->description)
-                            <p class="cool-gray">{{ $item->description }}</p>
+                            <p class="cool-gray">{{ arabicText($item->description) }}</p>
                         @endif
                     </td>
                     @if($invoice->hasItemUnits)

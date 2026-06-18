@@ -1877,3 +1877,18 @@ function getAffiliateCategoriesOptionHtml($categories, $selected_vals = [], $lev
 
     return $html;
 }
+
+if (!function_exists('arabicText')) {
+    /**
+     * Shape Arabic text into connected presentation forms + RTL order so it
+     * renders correctly inside DomPDF (PDF invoices). Strings with no Arabic
+     * are returned unchanged, so it is safe to wrap any field.
+     *
+     * @param  string|null  $text
+     * @return string|null
+     */
+    function arabicText($text)
+    {
+        return \App\Support\ArabicReshaper::shape($text);
+    }
+}

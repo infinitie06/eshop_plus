@@ -317,10 +317,10 @@
                                                         </strong>
 
                                                         <!-- Check if seller store data exists -->
-                                                        {{ isset($seller_store_data[0]) ? ucfirst($seller_store_data[0]->store_name) : 'N/A' }}<br>
+                                                        {{ isset($seller_store_data[0]) ? arabicText(ucfirst($seller_store_data[0]->store_name)) : 'N/A' }}<br>
 
                                                         <!-- Check if user data exists -->
-                                                        {{ isset($s_user_data[0]) ? ucfirst($s_user_data[0]->address) : 'Address not available' }}
+                                                        {{ isset($s_user_data[0]) ? arabicText(ucfirst($s_user_data[0]->address)) : 'Address not available' }}
                                                         <br>
 
                                                         <p>Email:
@@ -341,8 +341,8 @@
                                                             <p>Shipping Address</p>
                                                         </strong>
                                                         <span>
-                                                            {{ $invoice->buyer->name }}<br>
-                                                            {{ $invoice->buyer->custom_fields['address'] }}<br>
+                                                            {{ arabicText($invoice->buyer->name) }}<br>
+                                                            {{ arabicText($invoice->buyer->custom_fields['address']) }}<br>
                                                             {{ $invoice->seller->custom_fields['mobile_number'] }}
                                                         </span>
                                                         <br>
@@ -458,7 +458,7 @@
 
                                                                     <tr>
                                                                         <td>{{ $j }}<br></td>
-                                                                        <td class="w-25">{{ $product_name }}<br></td>
+                                                                        <td class="w-25">{{ arabicText($product_name) }}<br></td>
                                                                         <td class="w-25">{{ $product_variants }}<br>
                                                                         </td>
                                                                         <td>{{ app(CurrencyService::class)->formateCurrency(formatePriceDecimal($price)) }}<br>
