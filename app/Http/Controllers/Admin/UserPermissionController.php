@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Spatie\Permission\Models\Permission;
 use App\Traits\HandlesValidation;
+use App\Services\SettingService;
 
 class UserPermissionController extends Controller
 {
@@ -15,12 +16,20 @@ class UserPermissionController extends Controller
     public function index()
     {
         $permissions = Permission::all()->groupBy(function ($permission) {
+
             $name = $permission->name;
             $segments = explode(' ', $name);
             return end($segments);
         });
 
-        return view('admin.pages.forms.system_users', compact('permissions'));
+        $settings = app(SettingService::class)->getSettings();
+        $settings = json_decode($settings, true);
+
+        $country_code = $settings['country_code'] ?? null;
+
+
+
+        return view('admin.pages.forms.system_users', compact('permissions', 'country_code'));
     }
 
     public function store(Request $request)
@@ -50,9 +59,7 @@ class UserPermissionController extends Controller
         $user->save();
 
         // Update permissions for the user
-        $permissions = $request->input('permissions');
-
-        $this->permissionsUpdate($request, $user->id, $permissions);
+        $user->syncPermissions($this->resolveSelectedPermissions($request->input('permissions', [])));
 
         if ($request->ajax()) {
             return response()->json([
@@ -62,13 +69,45 @@ class UserPermissionController extends Controller
         }
     }
 
+    private function resolveSelectedPermissions($permissionsInput)
+    {
+        $selected = [];
+
+        foreach ((array) $permissionsInput as $module => $actions) {
+            if (!is_array($actions)) {
+                continue;
+            }
+
+            foreach ($actions as $action => $value) {
+                // Skip unchecked checkboxes ("off"/empty/0/null/false).
+                if (in_array($value, ['off', '', '0', 0, null, false], true)) {
+                    continue;
+                }
+
+                // Prefer a real permission name if one was actually posted; otherwise
+                // rebuild it from the "<action> <module>" field keys (handles the "on" value).
+                $selected[] = (is_string($value) && $value !== 'on' && $value !== '1')
+                    ? trim($value)
+                    : trim($action . ' ' . $module);
+            }
+        }
+
+        $selected = array_values(array_unique(array_filter($selected)));
+
+        if (empty($selected)) {
+            return [];
+        }
+
+        // Only sync permissions that exist to prevent PermissionDoesNotExist exceptions.
+        return Permission::whereIn('name', $selected)->pluck('name')->all();
+    }
+
     public function permissionsUpdate(Request $request, $id)
     {
 
         $user = User::findOrFail($id);
 
-        $permissions = $request->input('permissions');
-        $data = $user->syncPermissions($permissions);
+        $user->syncPermissions($this->resolveSelectedPermissions($request->input('permissions', [])));
 
         if ($request->ajax()) {
             return response()->json([
@@ -76,6 +115,7 @@ class UserPermissionController extends Controller
             ]);
         }
     }
+
 
     public function manageSystemUsers()
     {
