@@ -559,7 +559,7 @@
                                                 <tr>
                                                     <td></td>
                                                     <td class="text-right">
-                                                        <p>{{ isKeySetAndNotEmpty($settings, 'app_name') ? $settings['app_name'] : '' }}
+                                                        <p>{{ isKeySetAndNotEmpty($settings, 'app_name') ? arabicText($settings['app_name']) : '' }}
                                                         </p>
                                                         <img src="{{ $seller_signature }}" alt="logo"
                                                             height="50">

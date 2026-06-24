@@ -820,7 +820,7 @@
                                                                         </label>
                                                                         <input type="number" name="simple_price"
                                                                             class="form-control stock-simple-mustfill-field price"
-                                                                            value="{{ $product_variants[0]['price'] }}"
+                                                                            value="{{ $product_variants[0]['price'] ?? '' }}"
                                                                             min="0.01" step="0.01" required>
                                                                     </div>
                                                                 </div>
@@ -832,7 +832,7 @@
                                                                         </label>
                                                                         <input type="number" name="simple_special_price"
                                                                             class="form-control discounted_price"
-                                                                            value="{{ $product_variants[0]['special_price'] }}"
+                                                                            value="{{ $product_variants[0]['special_price'] ?? '' }}"
                                                                             min="0" step="0.01">
                                                                     </div>
                                                                 </div>
@@ -858,7 +858,7 @@
                                                                                 <input type="number" class="form-control"
                                                                                     name="weight" placeholder="{{ labels('admin_labels.weight_placeholder', 'Weight') }}"
                                                                                     id="weight"
-                                                                                    value="{{ $product_variants[0]['weight'] }}"
+                                                                                    value="{{ $product_variants[0]['weight'] ?? '' }}"
                                                                                     step="0.01" min=0>
                                                                             </div>
                                                                         </div>
@@ -870,7 +870,7 @@
                                                                                 <input type="number" min=0
                                                                                     class="form-control" name="height"
                                                                                     placeholder="{{ labels('admin_labels.height_placeholder', 'Height') }}" id="height"
-                                                                                    value="{{ $product_variants[0]['height'] }}"
+                                                                                    value="{{ $product_variants[0]['height'] ?? '' }}"
                                                                                     step="0.01">
 
                                                                             </div>
@@ -886,7 +886,7 @@
                                                                                 <input type="number" min=0
                                                                                     class="form-control" name="breadth"
                                                                                     placeholder="{{ labels('admin_labels.breadth_placeholder', 'Breadth') }}" id="breadth"
-                                                                                    value="{{ $product_variants[0]['breadth'] }}"
+                                                                                    value="{{ $product_variants[0]['breadth'] ?? '' }}"
                                                                                     step="0.01">
                                                                             </div>
                                                                         </div>
@@ -899,7 +899,7 @@
                                                                                 <input type="number" min=0
                                                                                     class="form-control" name="length"
                                                                                     placeholder="{{ labels('admin_labels.length_placeholder', 'Length') }}" id="length"
-                                                                                    value="{{ $product_variants[0]['length'] }}"
+                                                                                    value="{{ $product_variants[0]['length'] ?? '' }}"
                                                                                     step="0.01">
                                                                             </div>
                                                                         </div>

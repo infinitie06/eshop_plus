@@ -35,7 +35,7 @@ class Handler extends ExceptionHandler
     }
     public function render($request, Throwable $exception)
     {
-        // dd($exception);
+        dd($exception);
         if ($exception instanceof AuthenticationException) {
             if (!$request->expectsJson() && (Str::contains($_SERVER['REQUEST_URI'], '/admin') || Str::contains($_SERVER['REQUEST_URI'], '/seller/') || Str::contains($_SERVER['REQUEST_URI'], '/delivery_boy/'))) {
                 return redirect()->route('admin.login');

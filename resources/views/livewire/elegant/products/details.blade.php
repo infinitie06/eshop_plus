@@ -61,7 +61,7 @@
                                         );
                                     @endphp
                                     <a data-image="{{ $main_image }}" data-zoom-image="{{ $main_image_zoom }}"
-                                        class="slick-slide slick-cloned active">
+                                        class="active">
                                         <img class="blur-up lazyload rounded-0" data-src="{{ $main_image }}"
                                             src="{{ $main_image }}" alt="product" width="625" height="808"
                                             loading="eager" fetchpriority="high" decoding="async" />
@@ -71,8 +71,7 @@
                                             $other_image = app(MediaService::class)->dynamic_image($images, 600);
                                             $other_image_zoom = app(MediaService::class)->dynamic_image($images, 800);
                                         @endphp
-                                        <a data-image="{{ $other_image }}" data-zoom-image="{{ $other_image_zoom }}"
-                                            class="slick-slide slick-cloned active">
+                                        <a data-image="{{ $other_image }}" data-zoom-image="{{ $other_image_zoom }}">
                                             <img class="blur-up lazyload rounded-0" data-src="{{ $other_image }}"
                                                 src="{{ $other_image }}" alt="product" width="625"
                                                 height="808" loading="lazy" decoding="async" />
@@ -88,8 +87,7 @@
                                                 );
                                             @endphp
                                             <a data-image="{{ $other_image }}"
-                                                data-zoom-image="{{ $other_image_zoom }}"
-                                                class="slick-slide slick-cloned active">
+                                                data-zoom-image="{{ $other_image_zoom }}">
                                                 <img class="blur-up lazyload rounded-0" data-src="{{ $other_image }}"
                                                     src="{{ $other_image }}" alt="product" width="625"
                                                     height="808" loading="lazy" decoding="async" />
@@ -875,6 +873,49 @@
                     inputElement.click();
                 }
             }
+
+// The left-hand product gallery (#gallery / .product-thumb-vertical) is also
+// targeted by the theme's main.js, which inits it both as a horizontal slider
+// (on jQuery ready) and as a vertical one (on livewire:navigated). Those race
+// and leave the strip un-slicked, so the thumbnails just stack at full size.
+// This block is the single source of truth: it runs *after* the theme handlers
+// (next tick), tears down whatever was applied, and re-inits the correct
+// vertical config. Bound to both initial load and Livewire SPA navigation.
+(function () {
+    function initProductThumbVertical() {
+        if (typeof window.jQuery === 'undefined') return;
+        var $ = window.jQuery;
+        var $thumb = $('.product-thumb-vertical');
+        if (!$thumb.length || typeof $thumb.slick !== 'function') return;
+
+        setTimeout(function () {
+            if ($thumb.hasClass('slick-initialized')) {
+                try { $thumb.slick('unslick'); } catch (e) {}
+            }
+            $thumb.slick({
+                vertical: true,
+                verticalSwiping: true,
+                infinite: false,
+                arrows: true,
+                dots: false,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                responsive: [
+                    { breakpoint: 1024, settings: { slidesToShow: 3 } },
+                    { breakpoint: 768, settings: { vertical: false, verticalSwiping: false, slidesToShow: 3 } },
+                ],
+            });
+        }, 0);
+    }
+
+    document.addEventListener('DOMContentLoaded', initProductThumbVertical);
+    document.addEventListener('livewire:navigated', initProductThumbVertical);
+})();
+
+
+
+
+
         </script>
     </div>
 </div>

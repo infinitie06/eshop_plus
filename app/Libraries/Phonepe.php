@@ -22,7 +22,7 @@ class Phonepe
         $this->client_secret = $settings['phonepe_client_secret'] ?? env('PHONEPE_CLIENT_SECRET', '');
         $this->merchant_id = $settings['phonepe_merchant_id'] ?? env('PHONEPE_MERCHANT_ID', '');
         //dd($this->client_id, $this->client_secret, $this->merchant_id);
-        $this->environment  = $settings['phonepe_payment_mode'] ?? 'SANDBOX';
+        $this->environment  = $settings['phonepe_mode'] ?? 'sandbox';
         $mode = strtolower($settings['phonepe_mode'] ?? 'sandbox');
         $this->url = $mode === 'production'
             ? 'https://api.phonepe.com/apis/pg'
@@ -33,8 +33,9 @@ class Phonepe
     public function get_access_token()
     {
         $settings = app(SettingService::class)->getSettings('payment_method', true);
-        if (!empty($settings['phonepe_payment_mode']) && $settings['phonepe_payment_mode'] === "PRODUCTION") {
-            $token_url = "https://api.phonepe.com/apis/pg/v1/oauth/token";
+        $settings = json_decode($settings, true);
+        if (!empty($settings['phonepe_mode']) && $settings['phonepe_mode'] === "production") {
+            $token_url = "https://api.phonepe.com/apis/identity-manager/v1/oauth/token";
         } else {
             $token_url = "https://api-preprod.phonepe.com/apis/pg-sandbox/v1/oauth/token";
         }
@@ -44,6 +45,8 @@ class Phonepe
             'client_version' => 1,
             'grant_type'     => 'client_credentials',
         ];
+        
+        
         $curl = curl_init();
         curl_setopt_array($curl, [
             CURLOPT_URL => $token_url,
